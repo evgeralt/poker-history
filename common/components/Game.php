@@ -27,6 +27,13 @@ class Game extends Component
 
     public function start(int $initiatorId, int $chatId): int
     {
+        try {
+            $sessionId = $this->getSessionId($chatId);
+            $this->removeFromActiveGames($chatId, $sessionId);
+        } catch (\Throwable $exception) {
+            // nothing
+        }
+
         $session = new Sessions();
         $session->initiator_id = $initiatorId;
         $session->chat_id = $chatId;
@@ -122,7 +129,6 @@ class Game extends Component
         if (isset($activeGames[$chatId])) {
             return $activeGames[$chatId];
         }
-        var_dump($activeGames, $chatId);
 
         throw new Exception('Session id is not found');
     }
@@ -130,6 +136,14 @@ class Game extends Component
     protected function getActiveGames(): array
     {
         return $this->cache->get(self::ACTIVE_GAMES_CACHE_KEY) ?: [];
+    }
+
+    protected function removeFromActiveGames(int $chatId, int $sessionId): void
+    {
+        Sessions::updateAll(['status' => Sessions::STATUS_COMPLETED], ['id' => $sessionId]);
+        $activeGames = $this->getActiveGames();
+        unset($activeGames[$chatId]);
+        $this->cache->set(self::ACTIVE_GAMES_CACHE_KEY, $activeGames, 1200);
     }
 
     protected function pushToActiveGames(int $chatId, int $sessionId): void

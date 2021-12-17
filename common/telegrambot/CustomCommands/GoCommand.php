@@ -39,7 +39,7 @@ class GoCommand extends UserCommand
         $game = Yii::$app->game;
         try {
             $from = $this->getMessage()->getFrom();
-            $chatId = $from->getId();
+            $chatId = $this->getMessage()->getChat()->getId();
             $game->start($from->getId(), $this->getMessage()->getChat()->getId());
             $fullName = $from->getFirstName() . ' ' . $from->getLastName();
             $game->join($chatId, [$this->getMessage()->getFrom()->getId() => $fullName]);
