@@ -13,14 +13,14 @@ class SiteController extends Controller
     {
         /** @var TelegramBot $telegram */
         $telegram = Yii::$app->telegram;
-        $telegram->client->setWebhook(Yii::$app->params['webhookUrl']);
+        $telegram->client->setWebhook(getenv('TELEGRAM_WEBHOOK_URL'));
 
         return 'ok';
     }
 
     public function actionHook($id)
     {
-        if ($id !== 'sadlkxcvuy234AS') {
+        if ($id !== getenv('WEBHOOK_SECRET_KEY')) {
             return new BadRequestHttpException();
         }
 
