@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\controllers;
+namespace webhook\controllers;
 
 use evgeralt\yii2telegram\TelegramBot;
 use Yii;
