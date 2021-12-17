@@ -8,7 +8,7 @@ use yii\web\Controller;
 
 class SiteController extends Controller
 {
-    public function actionHook()
+    public function actionIndex()
     {
         /** @var TelegramBot $telegram */
         $telegram = Yii::$app->telegram;
