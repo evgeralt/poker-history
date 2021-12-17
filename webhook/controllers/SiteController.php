@@ -20,7 +20,7 @@ class SiteController extends Controller
 
     public function actionHook($id)
     {
-        if ($id !== 'sadlkxcvuy234AS') {
+        if ($id !== Yii::$app->params['webhookSecretKey']) {
             return new BadRequestHttpException();
         }
 
