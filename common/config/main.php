@@ -13,6 +13,12 @@ return [
             'class' => \evgeralt\yii2telegram\TelegramBot::class,
             'apiKey' => getenv('TELEGRAM_API_KEY'),
             'botName' => getenv('TELEGRAM_BOT_NAME'),
-        ]
+            'comandsPaths' => [
+                __DIR__ . '/../../common/telegrambot/CustomCommands'
+            ],
+        ],
+        'game' => [
+            'class' => \common\components\Game::class,
+        ],
     ],
 ];
