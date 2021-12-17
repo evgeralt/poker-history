@@ -33,6 +33,6 @@ class SiteController extends Controller
 
     public function actionError()
     {
-        return $this->redirect(['index/set-hook']);
+        return $this->redirect('set-hook');
     }
 }
