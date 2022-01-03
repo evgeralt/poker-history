@@ -2,6 +2,7 @@
 
 namespace common\cases\session;
 
+use common\models\SessionPlayers;
 use common\models\Sessions;
 use common\models\SessionTransactions;
 use yii\helpers\ArrayHelper;
@@ -90,5 +91,16 @@ class Session
         }
 
         return $res;
+    }
+
+    /**
+     * @return SessionPlayers[]
+     */
+    public function getPlayers(): array
+    {
+        return SessionPlayers::find()
+            ->andWhere(['session_id' => $this->getSessionId()])
+            ->with('user')
+            ->all();
     }
 }
