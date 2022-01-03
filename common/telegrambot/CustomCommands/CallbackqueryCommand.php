@@ -52,7 +52,7 @@ class CallbackqueryCommand extends SystemCommand
             $players = $session->getPlayers();
             $row = [];
             foreach ($players as $player) {
-                $row[] = ['text' => $player->user->getFullName(), 'callback_data' => "edit{$session->getSessionId()}-{$player->player_id}"];
+                $row[] = ['text' => $player->user->getFullName() . ' ' . ($player->sum ?: 0), 'callback_data' => "edit{$session->getSessionId()}-{$player->player_id}"];
                 if (count($row) === 2) {
                     $menu[] = $row;
                     $row = [];
