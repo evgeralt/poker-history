@@ -2,12 +2,11 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
-use common\components\Game;
 use Longman\TelegramBot\Commands\SystemCommand;
+use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use Yii;
 
 class WithdrawCommand extends SystemCommand
 {
@@ -32,28 +31,12 @@ class WithdrawCommand extends SystemCommand
      */
     public function execute(): ServerResponse
     {
-        /** @var Game $game */
-        $game = Yii::$app->game;
+        new Conversation($this->getMessage()->getFrom()->getId(), $this->getMessage()->getChat()->getId(), 'withdraw');
 
-        $requestAmount = $this->getMessage()->getText(true);
-        if (!$requestAmount) {
-            return $this->replyToChat('');
-        } else {
-            $chatId = $this->getMessage()->getChat()->getId();
-            $session = $game->instanceSession($chatId);
-            if (!$session->isJoined($this->getMessage()->getFrom()->getId())) {
-                $session->join($this->getMessage()->getFrom()->getId());
-            }
-            $session->transaction($this->getMessage()->getFrom()->getId(), $requestAmount);
-
-            $text = $this->getMessage()->getFrom()->getFirstName() . ' ' . $this->getMessage()->getFrom()->getLastName() . " withdraw a $requestAmount" . PHP_EOL;
-            $text .= "Bank: " . $session->bankSum();
-
-            return $this->replyToChat(
-                $text, [
-                    'reply_markup' => GoCommand::startScreen(),
-                ]
-            );
-        }
+        return $this->replyToChat(
+            'Сколько снять?', [
+                'reply_markup' => Keyboard::forceReply(),
+            ]
+        );
     }
 }

@@ -55,9 +55,7 @@ class GoCommand extends UserCommand
     public static function startScreen(): Keyboard
     {
         $keyboard = new Keyboard(
-            ['/deposit 100', '/deposit 200', '/deposit 300', '/deposit 500'],
-            ['/deposit 600', '/deposit 700', '/deposit 800', '/deposit 900'],
-            ['/deposit 1000', '/deposit 1200', '/deposit 1500', '/deposit 3000'],
+            ['/deposit', '/withdraw'],
             '/info',
             '/player',
         );
