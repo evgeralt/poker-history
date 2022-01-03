@@ -40,10 +40,15 @@ class WithdrawCommand extends SystemCommand
             return $this->replyToChat('');
         } else {
             $chatId = $this->getMessage()->getChat()->getId();
-            $game->transaction($chatId, $this->getMessage()->getFrom()->getId(), $requestAmount);
+            $session = $game->instanceSession($chatId);
+            if (!$session->isJoined($this->getMessage()->getFrom()->getId())) {
+                $fullName = $this->getMessage()->getFrom()->getFirstName() . ' ' . $this->getMessage()->getFrom()->getLastName();
+                $session->join([$this->getMessage()->getFrom()->getId() => $fullName]);
+            }
+            $session->transaction($this->getMessage()->getFrom()->getId(), $requestAmount);
 
             $text = $this->getMessage()->getFrom()->getFirstName() . ' ' . $this->getMessage()->getFrom()->getLastName() . " withdraw a $requestAmount" . PHP_EOL;
-            $text .= "Bank: " . $game->bankSum($chatId);
+            $text .= "Bank: " . $session->bankSum();
 
             return $this->replyToChat(
                 $text, [

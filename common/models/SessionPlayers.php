@@ -19,6 +19,7 @@ class SessionPlayers extends ActiveRecord
     {
         return [
             [['session_id', 'player_id'], 'integer'],
+            ['session_id', 'unique', 'targetAttribute' => ['session_id', 'player_id']],
         ];
     }
 }

@@ -35,7 +35,8 @@ class GgCommand extends SystemCommand
         /** @var Game $game */
         $game = Yii::$app->game;
 
-        $gameResults = $game->end($this->getMessage()->getChat()->getId());
+        $session = $game->instanceSession($this->getMessage()->getChat()->getId());
+        $gameResults = $session->end();
         $text = 'Game over, results: ' . PHP_EOL;
         foreach ($gameResults as $player => $sum) {
             $text .= "{$player} $sum" . PHP_EOL;

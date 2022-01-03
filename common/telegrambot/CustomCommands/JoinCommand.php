@@ -35,9 +35,10 @@ class JoinCommand extends SystemCommand
     {
         /** @var Game $game */
         $game = Yii::$app->game;
+        $session = $game->instanceSession($this->getMessage()->getChat()->getId());
         $from = $this->getMessage()->getFrom();
         $fullName = $from->getFirstName() . ' ' . $from->getLastName();
-        $game->join($this->getMessage()->getChat()->getId(), [$from->getId() => $fullName]);
+        $session->join([$from->getId() => $fullName]);
 
         return $this->replyToChat(
             'Welcome - ' . $from->getFirstName() . ' ' . $from->getLastName()

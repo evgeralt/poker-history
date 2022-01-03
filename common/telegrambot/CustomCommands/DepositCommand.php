@@ -45,10 +45,15 @@ class DepositCommand extends SystemCommand
                 ['/deposit 1000', '/deposit 1200', '/deposit 1500', '/deposit 3000']
             );
         } else {
-            $game->transaction($chatId, $this->getMessage()->getFrom()->getId(), -$requestAmount);
+            $session = $game->instanceSession($chatId);
+            if (!$session->isJoined($this->getMessage()->getFrom()->getId())) {
+                $fullName = $this->getMessage()->getFrom()->getFirstName() . ' ' . $this->getMessage()->getFrom()->getLastName();
+                $session->join([$this->getMessage()->getFrom()->getId() => $fullName]);
+            }
+            $session->transaction($this->getMessage()->getFrom()->getId(), -$requestAmount);
 
             $text = $this->getMessage()->getFrom()->getFirstName() . ' ' . $this->getMessage()->getFrom()->getLastName() . " deposit on $requestAmount" . PHP_EOL;
-            $text .= "Bank: " . $game->bankSum($chatId);
+            $text .= "Bank: " . $session->bankSum();
             $markup = GoCommand::startScreen();
         }
         $markup

@@ -25,8 +25,11 @@ class SiteController extends Controller
         return 'ok';
     }
 
-    public function actionUnsetHook()
+    public function actionUnsetHook($id)
     {
+        if ($id !== Yii::$app->params['webhookSecretKey']) {
+            return new BadRequestHttpException();
+        }
         /** @var TelegramBot $telegram */
         $telegram = Yii::$app->telegram;
         $telegram->client->deleteWebhook();

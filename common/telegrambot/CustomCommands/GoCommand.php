@@ -40,9 +40,10 @@ class GoCommand extends UserCommand
         try {
             $from = $this->getMessage()->getFrom();
             $chatId = $this->getMessage()->getChat()->getId();
-            $game->start($from->getId(), $this->getMessage()->getChat()->getId());
+            $session = $game->instanceSession($chatId);
+            $session->newSession($from->getId(), $this->getMessage()->getChat()->getId());
             $fullName = $from->getFirstName() . ' ' . $from->getLastName();
-            $game->join($chatId, [$this->getMessage()->getFrom()->getId() => $fullName]);
+            $session->join([$this->getMessage()->getFrom()->getId() => $fullName]);
         } catch (\Throwable $exception) {
 //            var_dump($exception->getMessage());
         }
