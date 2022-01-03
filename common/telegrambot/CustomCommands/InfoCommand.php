@@ -4,25 +4,24 @@ namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use common\components\Game;
 use Longman\TelegramBot\Commands\SystemCommand;
-use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use Yii;
 
-class GgCommand extends SystemCommand
+class InfoCommand extends SystemCommand
 {
     /**
      * @var string
      */
-    protected $name = 'gg';
+    protected $name = 'info';
     /**
      * @var string
      */
-    protected $description = 'End game';
+    protected $description = 'Info';
     /**
      * @var string
      */
-    protected $usage = '/gg';
+    protected $usage = '/info';
 
     /**
      * Main command execution
@@ -37,14 +36,11 @@ class GgCommand extends SystemCommand
 
         $session = $game->instanceSession($this->getMessage()->getChat()->getId());
         $gameResults = $session->getTransactionsSummary();
-        $text = 'Game over, results: ' . PHP_EOL;
+        $text = 'Bank info:' . PHP_EOL;
         foreach ($gameResults as $player => $sum) {
             $text .= "{$player} $sum" . PHP_EOL;
         }
-        $session->end();
 
-        return $this->replyToChat(
-            $text, ['reply_markup' => Keyboard::remove()]
-        );
+        return $this->replyToChat($text);
     }
 }

@@ -69,10 +69,13 @@ class Session
         return $bankSum * -1;
     }
 
-    public function end(): array
+    public function end()
     {
-        $players = $this->repo->getPlayers($this->getSessionId());
+        Sessions::updateAll(['status' => Sessions::STATUS_COMPLETED], ['id' => $this->getSessionId()]);
+    }
 
+    public function getTransactionsSummary(): array
+    {
         $data = SessionTransactions::find()
             ->select(['player_id', 'sum(amount) as sum'])
             ->andWhere(['session_id' => $this->getSessionId()])
@@ -80,11 +83,11 @@ class Session
             ->asArray()
             ->all();
         $data = ArrayHelper::map($data, 'player_id', 'sum');
+        $players = $this->repo->getPlayers($this->getSessionId());
         $res = [];
         foreach ($players as $playerId => $playerName) {
             $res[$playerName] = $data[$playerId] ?? '?';
         }
-        Sessions::updateAll(['status' => Sessions::STATUS_COMPLETED], ['id' => $this->getSessionId()]);
 
         return $res;
     }
