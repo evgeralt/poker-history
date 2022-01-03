@@ -72,7 +72,7 @@ class Session
 
     public function end()
     {
-        Sessions::updateAll(['status' => Sessions::STATUS_COMPLETED], ['id' => $this->getSessionId()]);
+        Sessions::updateAll(['status' => Sessions::STATUS_COMPLETED], ['chat_id' => $this->chatId]);
     }
 
     public function getTransactionsSummary(): array

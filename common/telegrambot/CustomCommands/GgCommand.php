@@ -36,10 +36,14 @@ class GgCommand extends SystemCommand
         $game = Yii::$app->game;
 
         $session = $game->instanceSession($this->getMessage()->getChat()->getId());
-        $gameResults = $session->getTransactionsSummary();
         $text = 'Game over, results: ' . PHP_EOL;
-        foreach ($gameResults as $player => $sum) {
-            $text .= "{$player} $sum" . PHP_EOL;
+        try {
+            $gameResults = $session->getTransactionsSummary();
+            foreach ($gameResults as $player => $sum) {
+                $text .= "{$player} $sum" . PHP_EOL;
+            }
+        } catch (\Throwable $exception) {
+            $text .= ' (error)';
         }
         $session->end();
 
