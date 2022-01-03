@@ -5,7 +5,6 @@ namespace common\cases\session;
 use common\models\SessionPlayers;
 use common\models\Sessions;
 use common\models\SessionTransactions;
-use yii\helpers\ArrayHelper;
 
 class Session
 {
