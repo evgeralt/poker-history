@@ -12,6 +12,8 @@ use yii\db\ActiveRecord;
  */
 class SessionPlayers extends ActiveRecord
 {
+    public $sum;
+
     public static function tableName()
     {
         return '{{%session_players}}';

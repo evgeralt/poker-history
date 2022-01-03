@@ -35,10 +35,9 @@ class InfoCommand extends SystemCommand
         $game = Yii::$app->game;
 
         $session = $game->instanceSession($this->getMessage()->getChat()->getId());
-        $gameResults = $session->getTransactionsSummary();
         $text = 'Bank info:' . PHP_EOL;
-        foreach ($gameResults as $player => $sum) {
-            $text .= "{$player} $sum" . PHP_EOL;
+        foreach ($session->getPlayers() as $player) {
+            $text .= "{$player->user->getFullName()} {$player->sum}" . PHP_EOL;
         }
 
         return $this->replyToChat($text);

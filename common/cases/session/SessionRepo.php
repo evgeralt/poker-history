@@ -55,9 +55,9 @@ class SessionRepo extends AbstractSessionRepo
         return $this->repoSlave->getPlayers($sessionId);
     }
 
-    public function savePlayers(array $playerIds, int $sessionId): void
+    public function savePlayer(int $playerId, int $sessionId): void
     {
-        $this->repoMaster->savePlayers($playerIds, $sessionId);
-        $this->repoSlave->savePlayers($playerIds, $sessionId);
+        $this->repoMaster->savePlayer($playerId, $sessionId);
+        $this->repoSlave->savePlayer($playerId, $sessionId);
     }
 }

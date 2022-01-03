@@ -19,6 +19,7 @@ class m211216_222945_create_session_players_table extends Migration
 
         $this->addPrimaryKey('pk_session_players', 'session_players', ['session_id', 'player_id']);
         $this->addForeignKey('fk_session_players_session_id', 'session_players', 'session_id', 'sessions', 'id');
+        $this->addForeignKey('fk_session_players_player_id', 'session_players', 'player_id', 'user', 'id');
     }
 
     /**

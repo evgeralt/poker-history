@@ -16,7 +16,7 @@ class Session
     /** @var int */
     private $sessionId;
 
-    public function __construct(SessionRepo $repo, int $chatId)
+    public function __construct(SessionRepoInterface $repo, int $chatId)
     {
         $this->chatId = $chatId;
         $this->setRepo($repo);
@@ -42,9 +42,9 @@ class Session
         return $this->sessionId;
     }
 
-    public function join(array $playerIds)
+    public function join(int $playerId)
     {
-        $this->repo->savePlayers($playerIds, $this->getSessionId());
+        $this->repo->savePlayer($playerId, $this->getSessionId());
     }
 
     public function isJoined(int $playerId): bool
@@ -75,32 +75,11 @@ class Session
         Sessions::updateAll(['status' => Sessions::STATUS_COMPLETED], ['chat_id' => $this->chatId]);
     }
 
-    public function getTransactionsSummary(): array
-    {
-        $data = SessionTransactions::find()
-            ->select(['player_id', 'sum(amount) as sum'])
-            ->andWhere(['session_id' => $this->getSessionId()])
-            ->groupBy('player_id')
-            ->asArray()
-            ->all();
-        $data = ArrayHelper::map($data, 'player_id', 'sum');
-        $players = $this->repo->getPlayers($this->getSessionId());
-        $res = [];
-        foreach ($players as $playerId => $playerName) {
-            $res[$playerName] = $data[$playerId] ?? '?';
-        }
-
-        return $res;
-    }
-
     /**
      * @return SessionPlayers[]
      */
     public function getPlayers(): array
     {
-        return SessionPlayers::find()
-            ->andWhere(['session_id' => $this->getSessionId()])
-            ->with('user')
-            ->all();
+        return $this->repo->getPlayers($this->getSessionId());
     }
 }

@@ -7,6 +7,7 @@ use yii\db\ActiveRecord;
 /**
  * @property integer $id
  * @property integer $is_bot
+ * @property integer $is_telegram
  * @property string  $first_name
  * @property string  $last_name
  * @property string  $username

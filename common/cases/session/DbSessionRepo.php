@@ -5,6 +5,7 @@ namespace common\cases\session;
 use common\models\SessionPlayers;
 use common\models\Sessions;
 use yii\base\InvalidCallException;
+use yii\db\Expression;
 
 class DbSessionRepo extends AbstractSessionRepo
 {
@@ -37,16 +38,18 @@ class DbSessionRepo extends AbstractSessionRepo
 
     public function getPlayers(int $sessionId): array
     {
-        return SessionPlayers::findAll(['session_id' => $sessionId]);
+        return SessionPlayers::find()
+            ->select(['*', 'sum' => new Expression('(select sum(amount) from session_transactions where session_id=session_players.session_id)')])
+            ->andWhere(['session_id' => $sessionId])
+            ->with('user')
+            ->all();
     }
 
-    public function savePlayers(array $playerIds, int $sessionId): void
+    public function savePlayer(int $playerId, int $sessionId): void
     {
-        foreach ($playerIds as $playerId => $playerName) {
-            $sessionPlayer = new SessionPlayers();
-            $sessionPlayer->session_id = $sessionId;
-            $sessionPlayer->player_id = $playerId;
-            $sessionPlayer->save();
-        }
+        $sessionPlayer = new SessionPlayers();
+        $sessionPlayer->session_id = $sessionId;
+        $sessionPlayer->player_id = $playerId;
+        $sessionPlayer->save();
     }
 }

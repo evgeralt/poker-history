@@ -37,13 +37,10 @@ class CacheSessionRepo extends AbstractSessionRepo
         return $this->cache->get(self::GAME_PLAYERS_CACHE_KEY . $sessionId) ?: [];
     }
 
-    public function savePlayers(array $playerIds, int $sessionId): void
+    public function savePlayer($playerId, int $sessionId): void
     {
         $players = $this->getPlayers($sessionId);
-        foreach ($playerIds as $playerId => $playerName) {
-            $players[$playerId] = $playerName;
-
-        }
+        $players[] = $playerId;
         $this->cache->set(self::GAME_PLAYERS_CACHE_KEY . $sessionId, $players, 120);
     }
 }

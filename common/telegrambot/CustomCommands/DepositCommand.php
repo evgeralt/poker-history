@@ -47,8 +47,7 @@ class DepositCommand extends SystemCommand
         } else {
             $session = $game->instanceSession($chatId);
             if (!$session->isJoined($this->getMessage()->getFrom()->getId())) {
-                $fullName = $this->getMessage()->getFrom()->getFirstName() . ' ' . $this->getMessage()->getFrom()->getLastName();
-                $session->join([$this->getMessage()->getFrom()->getId() => $fullName]);
+                $session->join($this->getMessage()->getFrom()->getId());
             }
             $session->transaction($this->getMessage()->getFrom()->getId(), -$requestAmount);
 

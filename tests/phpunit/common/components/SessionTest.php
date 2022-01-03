@@ -18,9 +18,8 @@ class SessionTest extends TestCase
         $this->assertIsInt($session->getSessionId());
 
         $this->assertSame([], $session->getPlayers());
-        $this->assertSame([], $session->getTransactionsSummary());
 
-        $session->join([1 => 1]);
+        $session->join(1);
         $this->assertSame(1, $session->getPlayers()[0]->player_id);
 
         $session->transaction(1, -100);
@@ -32,9 +31,6 @@ class SessionTest extends TestCase
      */
     private function getSession()
     {
-        return new Session(new SessionRepo(
-            new CacheSessionRepo(\Yii::$app->cache),
-            new DbSessionRepo()
-        ), 1);
+        return new Session(new DbSessionRepo(), 1);
     }
 }

@@ -38,9 +38,8 @@ class GgCommand extends SystemCommand
         $session = $game->instanceSession($this->getMessage()->getChat()->getId());
         $text = 'Game over, results: ' . PHP_EOL;
         try {
-            $gameResults = $session->getTransactionsSummary();
-            foreach ($gameResults as $player => $sum) {
-                $text .= "{$player} $sum" . PHP_EOL;
+            foreach ($session->getPlayers() as $player) {
+                $text .= "{$player->user->getFullName()} {$player->sum}" . PHP_EOL;
             }
         } catch (\Throwable $exception) {
             $text .= ' (error)';

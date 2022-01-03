@@ -2,6 +2,8 @@
 
 namespace common\cases\session;
 
+use common\models\SessionPlayers;
+
 interface SessionRepoInterface
 {
     public function getSessionId(int $chatId): int;
@@ -12,9 +14,14 @@ interface SessionRepoInterface
 
     public function newSession(int $initiatorId, int $chatId);
 
+    /**
+     * @param int $sessionId
+     *
+     * @return SessionPlayers[]
+     */
     public function getPlayers(int $sessionId): array;
 
-    public function savePlayers(array $playerIds, int $sessionId): void;
+    public function savePlayer(int $playerId, int $sessionId): void;
 
     public function isJoined(int $sessionId, int $playerId): bool;
 }

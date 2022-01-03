@@ -24,9 +24,6 @@ class Game extends Component
 
     public function instanceSession(int $chatId): Session
     {
-        return new Session(new SessionRepo(
-            new CacheSessionRepo($this->cache),
-            new DbSessionRepo(),
-        ), $chatId);
+        return new Session(new DbSessionRepo(), $chatId);
     }
 }
