@@ -15,7 +15,7 @@ class m211216_223155_create_session_transactions_table extends Migration
         $this->createTable('{{%session_transactions}}', [
             'id' => $this->primaryKey(),
             'session_id' => $this->integer()->notNull(),
-            'player_id' => $this->bigInteger()->notNull(),
+            'player_id' => $this->bigInteger(20)->notNull(),
             'amount' => $this->float()->notNull(),
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),

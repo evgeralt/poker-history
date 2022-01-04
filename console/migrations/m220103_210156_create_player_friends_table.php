@@ -13,8 +13,8 @@ class m220103_210156_create_player_friends_table extends Migration
     public function safeUp()
     {
         $this->createTable('{{%player_friends}}', [
-            'player_id' => $this->bigInteger()->notNull(),
-            'friend_id' => $this->bigInteger()->notNull(),
+            'player_id' => $this->bigInteger(20)->notNull(),
+            'friend_id' => $this->bigInteger(20)->notNull(),
         ]);
 
         $this->addPrimaryKey('pk_player_friends', 'player_friends', ['player_id', 'friend_id']);
