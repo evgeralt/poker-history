@@ -41,6 +41,11 @@ class Session
         return $this->sessionId;
     }
 
+    public function getChatId(): int
+    {
+        return $this->chatId;
+    }
+
     public function join(int $playerId)
     {
         $this->repo->savePlayer($playerId, $this->getSessionId());

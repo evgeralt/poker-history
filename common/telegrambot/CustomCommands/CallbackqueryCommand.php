@@ -38,6 +38,7 @@ class CallbackqueryCommand extends SystemCommand
         $session = $game->instanceSession($this->getCallbackQuery()->getMessage()->getChat()->getId());
         $callbackQuery = $this->getCallbackQuery();
         $callbackData = $callbackQuery->getData();
+        $fromId = $callbackQuery->getFrom()->getId();
 
         $data = [
             'chat_id' => $callbackQuery->getMessage()->getChat()->getId(),
@@ -46,9 +47,21 @@ class CallbackqueryCommand extends SystemCommand
         ];
         if ($callbackData === 'selectForAddPlayer') {
             $data['text'] = 'Выберите игрока или создайте виртуальный профиль (для игроков без Telegram)';
-            $data['reply_markup'] = new InlineKeyboard([
-                ['text' => 'Создать профиль', 'callback_data' => 'createPlayer'],
-            ]);
+
+            $menu = [];
+            $row = [];
+            foreach ($game->playerListForAdd($fromId, $session->getChatId()) as $player) {
+                $row[] = ['text' => $player->getFullName(), 'callback_data' => "addPlayer{$player->id}"];
+                if (count($row) === 3) {
+                    $menu[] = $row;
+                    $row = [];
+                }
+            }
+            if ($row) {
+                $menu[] = $row;
+            }
+            $menu[] = [['text' => 'Создать профиль', 'callback_data' => 'createPlayer']];
+            $data['reply_markup'] = new InlineKeyboard(...$menu);
         } elseif ($callbackData === 'createPlayer') {
             $conversation = new Conversation($callbackQuery->getFrom()->getId(), $callbackQuery->getMessage()->getChat()->getId(), 'manage');
             $conversation->notes['action'] = 'createPlayer';
@@ -76,6 +89,18 @@ class CallbackqueryCommand extends SystemCommand
             ]);
             $data['reply_markup'] = new InlineKeyboard([
                 ['text' => 'Отменить управление пользователем', 'callback_data' => 'cancelConversation'],
+            ]);
+        } elseif (str_contains($callbackData, 'addPlayer') !== false) {
+            $playerId = str_replace('addPlayer', '', $callbackData);
+            $player = $game->getPlayer($playerId);
+            $session->join($playerId);
+            Request::sendMessage([
+                'chat_id' => $callbackQuery->getMessage()->getChat()->getId(),
+                'text' => 'Игрок ' . $player->getFullName() . ' добавлен в игру',
+            ]);
+            Request::deleteMessage([
+                'chat_id' => $callbackQuery->getMessage()->getChat()->getId(),
+                'message_id' => $callbackQuery->getMessage()->getMessageId(),
             ]);
         } elseif ($callbackData === 'cancelConversation') {
             $conversation = new Conversation($callbackQuery->getFrom()->getId(), $callbackQuery->getMessage()->getChat()->getId());
