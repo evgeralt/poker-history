@@ -37,7 +37,7 @@ class InfoCommand extends SystemCommand
         $session = $game->instanceSession($this->getMessage()->getChat()->getId());
         $text = 'Bank info:' . PHP_EOL;
         foreach ($session->getPlayers() as $player) {
-            $text .= "{$player->user->getFullName()} {$player->sum}" . PHP_EOL;
+            $text .= "{$player->user->getFullName()} {$player->getSum()}" . PHP_EOL;
         }
 
         return $this->replyToChat($text);

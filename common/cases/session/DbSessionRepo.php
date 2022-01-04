@@ -39,7 +39,7 @@ class DbSessionRepo extends AbstractSessionRepo
     public function getPlayers(int $sessionId): array
     {
         return SessionPlayers::find()
-            ->select(['*', 'sum' => new Expression('(select sum(amount) from session_transactions where session_id=session_players.session_id)')])
+            ->select(['*', 'sum' => new Expression('(select sum(amount) from session_transactions where session_id=session_players.session_id and player_id=session_players.player_id)')])
             ->andWhere(['session_id' => $sessionId])
             ->with('user')
             ->all();

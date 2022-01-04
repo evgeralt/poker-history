@@ -14,7 +14,7 @@ class m211216_222945_create_session_players_table extends Migration
     {
         $this->createTable('{{%session_players}}', [
             'session_id' => $this->integer()->notNull(),
-            'player_id' => $this->integer()->notNull(),
+            'player_id' => $this->bigInteger()->notNull(),
         ]);
 
         $this->addPrimaryKey('pk_session_players', 'session_players', ['session_id', 'player_id']);

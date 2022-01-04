@@ -15,12 +15,13 @@ class m211216_223155_create_session_transactions_table extends Migration
         $this->createTable('{{%session_transactions}}', [
             'id' => $this->primaryKey(),
             'session_id' => $this->integer()->notNull(),
-            'player_id' => $this->integer()->notNull(),
+            'player_id' => $this->bigInteger()->notNull(),
             'amount' => $this->float()->notNull(),
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
         ]);
 
+        $this->addForeignKey('fk_session_transactions_player_id', 'session_transactions', 'player_id', 'user', 'id');
         $this->addForeignKey('fk_session_transactions_session_id', 'session_transactions', 'session_id', 'sessions', 'id');
     }
 

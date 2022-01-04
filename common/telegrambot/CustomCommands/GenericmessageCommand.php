@@ -32,15 +32,15 @@ class GenericmessageCommand extends SystemCommand
     {
         $message = $this->getMessage();
         $fromId = $message->getFrom()->getId();
-        $fromFullName = $message->getFrom()->getFirstName() . ' ' . $message->getFrom()->getLastName();
         $conversation = new Conversation($message->getFrom()->getId(), $message->getChat()->getId());
 
         /** @var Game $game */
         $game = Yii::$app->game;
         $session = $game->instanceSession($this->getMessage()->getChat()->getId());
         $text = '';
-        if ($conversation->exists() && ($command = $conversation->getCommand())) {
-            switch ($command) {
+        if ($conversation->exists()) {
+            $action = $conversation->notes['action'];
+            switch ($action) {
                 case "deposit":
                 case "withdraw":
                     $sum = (int)$message->getText();
@@ -48,18 +48,29 @@ class GenericmessageCommand extends SystemCommand
                         $text = 'Неверно указана сумма!';
                         break;
                     }
-                    if (!$session->isJoined($this->getMessage()->getFrom()->getId())) {
-                        $session->join($this->getMessage()->getFrom()->getId());
+                    $playerId = $this->getMessage()->getFrom()->getId();
+                    if (isset($conversation->notes['managePlayerId'])) {
+                        $playerId = $conversation->notes['managePlayerId'];
                     }
-                    $text = $fromFullName;
-                    if ($command === 'deposit') {
-                        $session->transaction($fromId, -$sum);
+                    if (!$session->isJoined($playerId)) {
+                        $session->join($playerId);
+                    }
+                    $text = $game->getPlayer($playerId)->getFullName();
+                    if ($action === 'deposit') {
+                        $session->transaction($playerId, -$sum);
                         $text .= " пополнил на $sum";
                     } else {
-                        $session->transaction($fromId, $sum);
+                        $session->transaction($playerId, $sum);
                         $text .= " снял $sum";
                     }
                     $text .= PHP_EOL . "Банк: " . $session->bankSum();
+
+                    break;
+                case 'createPlayer':
+                    $playerName = $message->getText();
+                    $text = $playerName . ' присоединился к игре';
+                    $playerId = $game->createPlayer($playerName);
+                    $session->join($playerId);
 
                     break;
             }

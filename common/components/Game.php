@@ -2,10 +2,9 @@
 
 namespace common\components;
 
-use common\cases\session\CacheSessionRepo;
 use common\cases\session\DbSessionRepo;
 use common\cases\session\Session;
-use common\cases\session\SessionRepo;
+use common\models\User;
 use yii\base\Component;
 use yii\caching\CacheInterface;
 use yii\di\Instance;
@@ -25,5 +24,27 @@ class Game extends Component
     public function instanceSession(int $chatId): Session
     {
         return new Session(new DbSessionRepo(), $chatId);
+    }
+
+    public function createPlayer(string $name): int
+    {
+        $minId = User::find()->select('min(id)')->scalar();
+        if (!$minId || $minId > 0) {
+            $minId = -1;
+        } else {
+            $minId--;
+        }
+        $user = new User();
+        $user->id = $minId;
+        $user->first_name = $name;
+        $user->is_telegram = 0;
+        $user->save();
+
+        return $user->id;
+    }
+
+    public function getPlayer(int $playerId): User
+    {
+        return User::findOne(['id' => $playerId]);
     }
 }

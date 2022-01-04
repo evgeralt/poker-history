@@ -32,12 +32,10 @@ class DepositCommand extends SystemCommand
      */
     public function execute(): ServerResponse
     {
-        new Conversation($this->getMessage()->getFrom()->getId(), $this->getMessage()->getChat()->getId(), 'deposit');
+        $conversation = new Conversation($this->getMessage()->getFrom()->getId(), $this->getMessage()->getChat()->getId(), 'manage');
+        $conversation->notes['action'] = 'deposit';
+        $conversation->update();
 
-        return $this->replyToChat(
-            'На какую сумму пополнить?', [
-                'reply_markup' => Keyboard::forceReply(),
-            ]
-        );
+        return $this->replyToChat('На какую сумму пополнить?');
     }
 }

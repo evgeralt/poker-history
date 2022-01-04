@@ -31,4 +31,9 @@ class SessionPlayers extends ActiveRecord
             ['session_id', 'unique', 'targetAttribute' => ['session_id', 'player_id']],
         ];
     }
+
+    public function getSum(): float
+    {
+        return $this->sum ?: 0;
+    }
 }

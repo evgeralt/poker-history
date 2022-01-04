@@ -39,7 +39,7 @@ class GgCommand extends SystemCommand
         $text = 'Game over, results: ' . PHP_EOL;
         try {
             foreach ($session->getPlayers() as $player) {
-                $text .= "{$player->user->getFullName()} {$player->sum}" . PHP_EOL;
+                $text .= "{$player->user->getFullName()} {$player->getSum()}" . PHP_EOL;
             }
         } catch (\Throwable $exception) {
             $text .= ' (error)';

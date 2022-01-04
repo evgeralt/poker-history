@@ -24,6 +24,6 @@ class User extends ActiveRecord
 
     public function getFullName(): string
     {
-        return $this->first_name . ' ' . $this->last_name . " (@{$this->username})";
+        return $this->first_name . ' ' . $this->last_name;
     }
 }

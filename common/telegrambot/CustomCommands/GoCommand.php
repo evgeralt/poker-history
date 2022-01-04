@@ -56,11 +56,9 @@ class GoCommand extends UserCommand
     {
         $keyboard = new Keyboard(
             ['/deposit', '/withdraw'],
-            '/info',
-            '/player',
+            ['/info', '/players'],
         );
         $keyboard
-            ->setInputFieldPlaceholder('Deposit')
             ->setResizeKeyboard(true)
             ->setSelective(false);
 

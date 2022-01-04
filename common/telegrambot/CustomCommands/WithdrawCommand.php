@@ -31,12 +31,10 @@ class WithdrawCommand extends SystemCommand
      */
     public function execute(): ServerResponse
     {
-        new Conversation($this->getMessage()->getFrom()->getId(), $this->getMessage()->getChat()->getId(), 'withdraw');
+        $conversation = new Conversation($this->getMessage()->getFrom()->getId(), $this->getMessage()->getChat()->getId(), 'manage');
+        $conversation->notes['action'] = 'withdraw';
+        $conversation->update();
 
-        return $this->replyToChat(
-            'Сколько снять?', [
-                'reply_markup' => Keyboard::forceReply(),
-            ]
-        );
+        return $this->replyToChat('Сколько снять?');
     }
 }

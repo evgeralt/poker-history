@@ -13,7 +13,7 @@ class m211216_222910_vendor_structure extends Migration
 CREATE TABLE IF NOT EXISTS `user` (
   `id` bigint COMMENT 'Unique identifier for this user or bot',
   `is_bot` tinyint(1) DEFAULT 0 COMMENT 'True, if this user is a bot',
-  `is_telegram` tinyint(1) DEFAULT 0 COMMENT 'True, if this telegram user; false, if this virtual user',
+  `is_telegram` tinyint(1) DEFAULT 1 COMMENT 'True, if this telegram user; false, if this virtual user',
   `first_name` CHAR(255) NOT NULL DEFAULT '' COMMENT 'User''s or bot''s first name',
   `last_name` CHAR(255) DEFAULT NULL COMMENT 'User''s or bot''s last name',
   `username` CHAR(191) DEFAULT NULL COMMENT 'User''s or bot''s username',
