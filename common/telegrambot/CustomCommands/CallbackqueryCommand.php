@@ -6,6 +6,7 @@ use common\components\Game;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\Entities\InlineKeyboard;
+use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Request;
 use Yii;
@@ -69,6 +70,7 @@ class CallbackqueryCommand extends SystemCommand
             Request::sendMessage([
                 'chat_id' => $callbackQuery->getMessage()->getChat()->getId(),
                 'text' => 'Введите имя игрока',
+                'reply_markup' => Keyboard::forceReply(),
             ]);
             Request::deleteMessage([
                 'chat_id' => $callbackQuery->getMessage()->getChat()->getId(),

@@ -36,6 +36,10 @@ class DepositCommand extends SystemCommand
         $conversation->notes['action'] = 'deposit';
         $conversation->update();
 
-        return $this->replyToChat('На какую сумму пополнить?');
+        return $this->replyToChat(
+            'На какую сумму пополнить?', [
+                'reply_markup' => Keyboard::forceReply(),
+            ]
+        );
     }
 }

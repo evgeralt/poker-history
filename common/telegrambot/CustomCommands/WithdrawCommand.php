@@ -35,6 +35,9 @@ class WithdrawCommand extends SystemCommand
         $conversation->notes['action'] = 'withdraw';
         $conversation->update();
 
-        return $this->replyToChat('Сколько снять?');
-    }
+        return $this->replyToChat(
+            'Сколько снять?', [
+                'reply_markup' => Keyboard::forceReply(),
+            ]
+        );    }
 }
