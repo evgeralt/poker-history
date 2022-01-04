@@ -61,7 +61,7 @@ class CallbackqueryCommand extends SystemCommand
                 'chat_id' => $callbackQuery->getMessage()->getChat()->getId(),
                 'message_id' => $callbackQuery->getMessage()->getMessageId(),
             ]);
-        } elseif (str_contains('editPlayer', $callbackData)) {
+        } elseif (str_contains($callbackData, 'editPlayer') !== false) {
             $playerId = str_replace('editPlayer', '', $callbackData);
             $player = $game->getPlayer($playerId);
             $conversation = new Conversation($callbackQuery->getFrom()->getId(), $callbackQuery->getMessage()->getChat()->getId(), 'manage');
