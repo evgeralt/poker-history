@@ -1,0 +1,55 @@
+{
+    "name": "evgeralt/poker-history",
+    "description": "Telegram bot for poker history",
+    "keywords": ["telegram", "bot", "poker"],
+    "homepage": "https://github.com/evgeralt/poker-history/",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Evgeniy Michkaryov",
+            "email": "bash057@gmail.com"
+        },
+        {
+            "name": "PHP Telegram Bot Team",
+            "homepage": "https://github.com/php-telegram-bot/example-bot/graphs/contributors",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^7.3",
+        "yiisoft/yii2": "~2.0.43",
+        "vlucas/phpdotenv": "^5.4@dev",
+        "evgeralt/yii2-telegram-bot": "*"
+    },
+    "require-dev": {
+        "php-parallel-lint/php-parallel-lint": "^1.2",
+        "squizlabs/php_codesniffer": "^3.5",
+        "phpunit/phpunit": "^9"
+    },
+    "config": {
+        "process-timeout": 1800,
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "yii\\composer\\Installer::postInstall"
+        ],
+        "post-create-project-cmd": [
+            "yii\\composer\\Installer::postCreateProject",
+            "yii\\composer\\Installer::postInstall"
+        ],
+        "check-code": [
+            "\"vendor/bin/phpcs\""
+        ]
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
+}

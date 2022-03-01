@@ -1,0 +1,26 @@
+version: '3.2'
+
+services:
+
+  fpm:
+    build: ./docker/php7-fpm
+    volumes:
+      - ./:/var/www
+    expose:
+      - 9000
+    links:
+      - mysql
+    environment:
+      COMPOSER_AUTH: "${COMPOSER_AUTH}"
+
+  mysql:
+    image: mysql:5.7
+    ports:
+      - 3308:3306
+    expose:
+      - 3306
+    volumes:
+      - ./:/var/www
+    environment:
+      MYSQL_DATABASE: poker_history
+      MYSQL_ROOT_PASSWORD: root
